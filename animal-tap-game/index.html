@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Tap an Animal! 🐾</title>
+<meta name="description" content="A simple tap-to-hear animal sounds game for toddlers." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+<script type="text/babel" data-type="module">
+const { useState, useRef } = React;
+
+const ANIMALS = [
+  { name: "Cow", sound: "Moo!", emoji: "🐮", bg: "#FFD166", ring: "#F4A300" },
+  { name: "Dog", sound: "Woof!", emoji: "🐶", bg: "#FF9F76", ring: "#F76F3C" },
+  { name: "Cat", sound: "Meow!", emoji: "🐱", bg: "#B8B8FF", ring: "#7A7AE0" },
+  { name: "Duck", sound: "Quack!", emoji: "🦆", bg: "#9AE6B4", ring: "#4CBB7A" },
+  { name: "Lion", sound: "Roar!", emoji: "🦁", bg: "#FFCF56", ring: "#E8A400" },
+  { name: "Elephant", sound: "Toot!", emoji: "🐘", bg: "#A7D8E8", ring: "#5CA9C4" },
+  { name: "Pig", sound: "Oink!", emoji: "🐷", bg: "#FFB6C1", ring: "#F080A0" },
+  { name: "Sheep", sound: "Baa!", emoji: "🐑", bg: "#E6E6FA", ring: "#B8A8E0" },
+];
+
+function AnimalTapGame() {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [bursts, setBursts] = useState([]);
+  const timeoutRef = useRef(null);
+
+  const speak = (text, rate = 0.95, pitch = 1.1) => {
+    if (!("speechSynthesis" in window)) return;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = rate;
+    utter.pitch = pitch;
+    window.speechSynthesis.speak(utter);
+  };
+
+  const handleTap = (animal, index) => {
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    clearTimeout(timeoutRef.current);
+
+    setActiveIndex(index);
+
+    const burstId = Date.now();
+    setBursts((prev) => [...prev, { id: burstId, index }]);
+    setTimeout(() => {
+      setBursts((prev) => prev.filter((b) => b.id !== burstId));
+    }, 700);
+
+    speak(animal.name, 0.9, 1.15);
+    timeoutRef.current = setTimeout(() => {
+      speak(animal.sound, 0.85, 1.3);
+    }, 750);
+
+    setTimeout(() => setActiveIndex(null), 1000);
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100%",
+        background:
+          "radial-gradient(circle at 20% 20%, #FFF9EC 0%, #FDEBD3 45%, #FCD9B8 100%)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "28px 16px 40px",
+        fontFamily:
+          "'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', sans-serif",
+        boxSizing: "border-box",
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap');
+
+        @keyframes pop {
+          0% { transform: scale(1); }
+          35% { transform: scale(1.18) rotate(-3deg); }
+          60% { transform: scale(0.96) rotate(2deg); }
+          100% { transform: scale(1.06); }
+        }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 0px 0px var(--ring); }
+          50% { box-shadow: 0 0 0 14px var(--ring); }
+        }
+        @keyframes sparkleOut {
+          0% { transform: translate(0,0) scale(0.4); opacity: 1; }
+          100% { transform: translate(var(--tx), var(--ty)) scale(1.1); opacity: 0; }
+        }
+        .tile {
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .tile:active {
+          transform: scale(0.94);
+        }
+        .tile.active {
+          animation: pop 0.5s ease, glow 0.6s ease;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .tile.active { animation: none; }
+        }
+      `}</style>
+
+      <h1
+        style={{
+          fontFamily: "'Baloo 2', sans-serif",
+          fontWeight: 800,
+          fontSize: "clamp(28px, 6vw, 44px)",
+          color: "#7A4A1E",
+          margin: "4px 0 4px",
+          textAlign: "center",
+          letterSpacing: "0.5px",
+        }}
+      >
+        🐾 Tap an Animal! 🐾
+      </h1>
+      <p
+        style={{
+          color: "#A16B3B",
+          fontSize: "clamp(15px, 3vw, 19px)",
+          fontWeight: 600,
+          margin: "0 0 24px",
+          textAlign: "center",
+        }}
+      >
+        Listen to its name and sound
+      </p>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+          gap: "18px",
+          width: "100%",
+          maxWidth: "640px",
+        }}
+      >
+        {ANIMALS.map((animal, index) => {
+          const isActive = activeIndex === index;
+          const burst = bursts.find((b) => b.index === index);
+          return (
+            <button
+              key={animal.name}
+              onClick={() => handleTap(animal, index)}
+              className={`tile${isActive ? " active" : ""}`}
+              style={{
+                "--ring": animal.ring,
+                position: "relative",
+                border: "none",
+                borderRadius: "28px",
+                background: animal.bg,
+                aspectRatio: "1 / 1",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                boxShadow: isActive
+                  ? `0 8px 0 ${animal.ring}`
+                  : `0 6px 0 ${animal.ring}`,
+                outline: "none",
+                overflow: "visible",
+              }}
+              aria-label={`${animal.name}, say ${animal.sound}`}
+            >
+              <span
+                style={{
+                  fontSize: "clamp(48px, 10vw, 72px)",
+                  lineHeight: 1,
+                  filter: isActive
+                    ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))"
+                    : "none",
+                }}
+              >
+                {animal.emoji}
+              </span>
+              <span
+                style={{
+                  marginTop: "8px",
+                  fontFamily: "'Baloo 2', sans-serif",
+                  fontWeight: 800,
+                  fontSize: "clamp(16px, 3.2vw, 20px)",
+                  color: "#5A3A1A",
+                }}
+              >
+                {animal.name}
+              </span>
+
+              {isActive && (
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: "-6px",
+                    background: "#fff",
+                    color: animal.ring,
+                    fontWeight: 800,
+                    fontFamily: "'Baloo 2', sans-serif",
+                    fontSize: "15px",
+                    padding: "3px 12px",
+                    borderRadius: "999px",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {animal.sound}
+                </span>
+              )}
+
+              {burst &&
+                Array.from({ length: 6 }).map((_, i) => {
+                  const angle = (i / 6) * 2 * Math.PI;
+                  const tx = Math.cos(angle) * 55;
+                  const ty = Math.sin(angle) * 55;
+                  return (
+                    <span
+                      key={i}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        background: animal.ring,
+                        "--tx": `${tx}px`,
+                        "--ty": `${ty}px`,
+                        animation: "sparkleOut 0.7s ease-out forwards",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  );
+                })}
+            </button>
+          );
+        })}
+      </div>
+
+      <p
+        style={{
+          marginTop: "28px",
+          color: "#B98A5C",
+          fontSize: "13px",
+          textAlign: "center",
+        }}
+      >
+        Turn your device volume up 🔊
+      </p>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<AnimalTapGame />);
+</script>
+</body>
+</html>
