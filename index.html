@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Toddler Games</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 20% 20%, #FFF9EC 0%, #FDEBD3 45%, #FCD9B8 100%);
+    font-family: 'Trebuchet MS', 'Comic Sans MS', sans-serif;
+    padding: 40px 16px;
+    box-sizing: border-box;
+  }
+  h1 { color: #7A4A1E; font-size: clamp(28px, 6vw, 42px); margin-bottom: 8px; text-align: center; }
+  p.sub { color: #A16B3B; margin-top: 0; margin-bottom: 32px; text-align: center; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+  }
+  a.card {
+    display: block;
+    text-decoration: none;
+    background: #FFD166;
+    border-radius: 24px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 6px 0 #F4A300;
+    color: #5A3A1A;
+    font-weight: bold;
+    font-size: 20px;
+    transition: transform 0.15s ease;
+  }
+  a.card:active { transform: scale(0.96); }
+  .emoji { font-size: 48px; display: block; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+  <h1>🐾 Toddler Games 🐾</h1>
+  <p class="sub">Simple, safe, tap-to-play games for little ones</p>
+  <div class="grid">
+    <a class="card" href="animal-tap-game/">
+      <span class="emoji">🐮</span>
+      Animal Tap Game
+    </a>
+  </div>
+</body>
+</html>
