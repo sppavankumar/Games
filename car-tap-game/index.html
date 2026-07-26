@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Tap a Car Brand! 🚗</title>
+<meta name="description" content="A simple tap-to-hear car brand game for toddlers." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚗</text></svg>" />
+<style>
+html, body { margin: 0; padding: 0; }
+#root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+<script type="text/babel" data-type="module">
+const { useState } = React;
+
+// Simple custom vehicle silhouettes (not brand logos) — shape communicates vehicle type
+const Sedan = ({ color }) => (
+  <svg viewBox="0 0 100 50" width="72" height="36">
+    <path
+      d="M10 38 L14 26 Q20 14 34 14 L64 14 Q76 14 82 26 L90 38 L90 42 L10 42 Z"
+      fill={color}
+    />
+    <circle cx="26" cy="42" r="7" fill="#2A2A2A" />
+    <circle cx="74" cy="42" r="7" fill="#2A2A2A" />
+    <path d="M32 16 L40 16 L38 26 L26 26 Z" fill="#DCEFFF" opacity="0.85" />
+    <path d="M58 16 L66 16 L74 26 L60 26 Z" fill="#DCEFFF" opacity="0.85" />
+  </svg>
+);
+const Truck = ({ color }) => (
+  <svg viewBox="0 0 100 50" width="72" height="36">
+    <path d="M8 40 L8 24 Q8 16 18 16 L40 16 L46 26 L52 26 L52 40 Z" fill={color} />
+    <rect x="52" y="20" width="38" height="20" fill={color} />
+    <circle cx="24" cy="42" r="7" fill="#2A2A2A" />
+    <circle cx="76" cy="42" r="7" fill="#2A2A2A" />
+    <path d="M20 18 L38 18 L42 25 L20 25 Z" fill="#DCEFFF" opacity="0.85" />
+  </svg>
+);
+const SUV = ({ color }) => (
+  <svg viewBox="0 0 100 50" width="72" height="36">
+    <path
+      d="M10 40 L10 24 Q10 14 22 14 L74 14 Q86 14 88 24 L90 40 L90 42 L10 42 Z"
+      fill={color}
+    />
+    <circle cx="26" cy="42" r="7" fill="#2A2A2A" />
+    <circle cx="74" cy="42" r="7" fill="#2A2A2A" />
+    <path d="M22 16 L45 16 L45 26 L20 26 Z" fill="#DCEFFF" opacity="0.85" />
+    <path d="M48 16 L72 16 L78 26 L48 26 Z" fill="#DCEFFF" opacity="0.85" />
+  </svg>
+);
+const Minivan = ({ color }) => (
+  <svg viewBox="0 0 100 50" width="72" height="36">
+    <path
+      d="M8 40 L8 22 Q8 12 22 12 L76 12 Q90 12 90 24 L90 40 L90 42 L8 42 Z"
+      fill={color}
+    />
+    <circle cx="26" cy="42" r="7" fill="#2A2A2A" />
+    <circle cx="74" cy="42" r="7" fill="#2A2A2A" />
+    <path d="M18 14 L38 14 L38 25 L16 25 Z" fill="#DCEFFF" opacity="0.85" />
+    <path d="M41 14 L61 14 L61 25 L41 25 Z" fill="#DCEFFF" opacity="0.85" />
+    <path d="M64 14 L76 14 L82 25 L64 25 Z" fill="#DCEFFF" opacity="0.85" />
+  </svg>
+);
+const Coupe = ({ color }) => (
+  <svg viewBox="0 0 100 50" width="72" height="36">
+    <path
+      d="M8 40 L16 28 Q24 16 40 16 L60 16 Q72 16 80 26 L92 38 L92 42 L8 42 Z"
+      fill={color}
+    />
+    <circle cx="26" cy="42" r="7" fill="#2A2A2A" />
+    <circle cx="76" cy="42" r="7" fill="#2A2A2A" />
+    <path d="M38 18 L58 18 L64 27 L36 27 Z" fill="#DCEFFF" opacity="0.85" />
+  </svg>
+);
+
+const CARS = [
+  { brand: "Tesla", model: "Model Y", Icon: SUV, bg: "#CBD5E1", ring: "#475569" },
+  { brand: "Ford", model: "F-150", Icon: Truck, bg: "#93C5FD", ring: "#1D4ED8" },
+  { brand: "Chevrolet", model: "Silverado", Icon: Truck, bg: "#FDE68A", ring: "#CA8A04" },
+  { brand: "Jeep", model: "Wrangler", Icon: SUV, bg: "#86EFAC", ring: "#15803D" },
+  { brand: "Toyota", model: "Camry", Icon: Sedan, bg: "#FCA5A5", ring: "#B91C1C" },
+  { brand: "Honda", model: "Civic", Icon: Sedan, bg: "#A5F3FC", ring: "#0E7490" },
+  { brand: "Ram", model: "1500", Icon: Truck, bg: "#C4B5FD", ring: "#6D28D9" },
+  { brand: "GMC", model: "Sierra", Icon: Truck, bg: "#FDBA74", ring: "#C2410C" },
+  { brand: "Dodge", model: "Charger", Icon: Coupe, bg: "#F9A8D4", ring: "#BE185D" },
+  { brand: "Chrysler", model: "Pacifica", Icon: Minivan, bg: "#BAE6FD", ring: "#0369A1" },
+];
+
+function CarTapGame() {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [bursts, setBursts] = useState([]);
+
+  const speak = (text, rate = 0.95, pitch = 1) => {
+    if (!("speechSynthesis" in window)) return;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = rate;
+    utter.pitch = pitch;
+    window.speechSynthesis.speak(utter);
+  };
+
+  const handleTap = (car, index) => {
+    window.speechSynthesis.cancel();
+    setActiveIndex(index);
+    const burstId = Date.now();
+    setBursts((prev) => [...prev, { id: burstId, index }]);
+    setTimeout(() => {
+      setBursts((prev) => prev.filter((b) => b.id !== burstId));
+    }, 700);
+    speak(car.brand, 0.9, 1.05);
+    setTimeout(() => speak(car.model, 0.85, 1.05), 700);
+    setTimeout(() => speak("Vroom vroom!", 0.9, 1.2), 1500);
+    setTimeout(() => setActiveIndex(null), 1000);
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100%",
+        background:
+          "radial-gradient(circle at 20% 20%, #F0F4FF 0%, #DCE6FA 45%, #C7D6EF 100%)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "28px 16px 40px",
+        fontFamily: "'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', sans-serif",
+        boxSizing: "border-box",
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap');
+        @keyframes pop {
+          0% { transform: scale(1); }
+          35% { transform: scale(1.16) rotate(-2deg); }
+          60% { transform: scale(0.96) rotate(2deg); }
+          100% { transform: scale(1.05); }
+        }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 0px 0px var(--ring); }
+          50% { box-shadow: 0 0 0 14px var(--ring); }
+        }
+        @keyframes sparkleOut {
+          0% { transform: translate(0,0) scale(0.4); opacity: 1; }
+          100% { transform: translate(var(--tx), var(--ty)) scale(1.1); opacity: 0; }
+        }
+        .ctile { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+        .ctile:active { transform: scale(0.94); }
+        .ctile.active { animation: pop 0.5s ease, glow 0.6s ease; }
+        @media (prefers-reduced-motion: reduce) {
+          .ctile.active { animation: none; }
+        }
+      `}</style>
+      <h1
+        style={{
+          fontFamily: "'Baloo 2', sans-serif",
+          fontWeight: 800,
+          fontSize: "clamp(26px, 6vw, 42px)",
+          color: "#1E3A5F",
+          margin: "4px 0 4px",
+          textAlign: "center",
+        }}
+      >
+        🚗 Tap a Car Brand! 🚗
+      </h1>
+      <p
+        style={{
+          color: "#4A6B8A",
+          fontSize: "clamp(15px, 3vw, 19px)",
+          fontWeight: 600,
+          margin: "0 0 24px",
+          textAlign: "center",
+        }}
+      >
+        Learn famous car brands in the USA
+      </p>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+          gap: "16px",
+          width: "100%",
+          maxWidth: "720px",
+        }}
+      >
+        {CARS.map((car, index) => {
+          const isActive = activeIndex === index;
+          const burst = bursts.find((b) => b.index === index);
+          const Icon = car.Icon;
+          return (
+            <button
+              key={car.brand}
+              onClick={() => handleTap(car, index)}
+              className={`ctile${isActive ? " active" : ""}`}
+              style={{
+                "--ring": car.ring,
+                position: "relative",
+                border: "none",
+                borderRadius: "26px",
+                background: car.bg,
+                aspectRatio: "1 / 1",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                boxShadow: `0 6px 0 ${car.ring}`,
+                outline: "none",
+                overflow: "visible",
+              }}
+              aria-label={`${car.brand}, ${car.model}`}
+            >
+              <div
+                style={{
+                  filter: isActive
+                    ? "drop-shadow(0 0 8px rgba(255,255,255,0.9))"
+                    : "none",
+                }}
+              >
+                <Icon color={car.ring} />
+              </div>
+              <span
+                style={{
+                  marginTop: "6px",
+                  fontFamily: "'Baloo 2', sans-serif",
+                  fontWeight: 800,
+                  fontSize: "clamp(14px, 2.8vw, 18px)",
+                  color: "#1E3A5F",
+                  textAlign: "center",
+                }}
+              >
+                {car.brand}
+              </span>
+              {isActive && (
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: "-6px",
+                    background: "#fff",
+                    color: car.ring,
+                    fontWeight: 800,
+                    fontFamily: "'Baloo 2', sans-serif",
+                    fontSize: "14px",
+                    padding: "3px 12px",
+                    borderRadius: "999px",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {car.model}
+                </span>
+              )}
+              {burst &&
+                Array.from({ length: 6 }).map((_, i) => {
+                  const angle = (i / 6) * 2 * Math.PI;
+                  const tx = Math.cos(angle) * 50;
+                  const ty = Math.sin(angle) * 50;
+                  return (
+                    <span
+                      key={i}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "9px",
+                        height: "9px",
+                        borderRadius: "50%",
+                        background: car.ring,
+                        "--tx": `${tx}px`,
+                        "--ty": `${ty}px`,
+                        animation: "sparkleOut 0.7s ease-out forwards",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  );
+                })}
+            </button>
+          );
+        })}
+      </div>
+      <p style={{ marginTop: "28px", color: "#6B87A8", fontSize: "13px", textAlign: "center" }}>
+        Turn your device volume up 🔊
+      </p>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<CarTapGame />);
+</script>
+</body>
+</html>
