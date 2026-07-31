@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Tap a God! 🪷</title>
+<meta name="description" content="A simple tap-to-learn game introducing kids to Hindu deities through their well-known symbols." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪷</text></svg>" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+<script type="text/babel" data-type="module">
+const { useState, useRef } = React;
+
+const GODS = [
+  { name: "Ganesha", title: "Remover of obstacles", emoji: "🐘", bg: "#FFE9D6", ring: "#E07A2C" },
+  { name: "Krishna", title: "Playful and wise", emoji: "🪈", bg: "#E3ECFB", ring: "#3B5FCC" },
+  { name: "Hanuman", title: "Strong and devoted", emoji: "🐒", bg: "#FFE3D0", ring: "#D9531E" },
+  { name: "Rama", title: "Brave and honest", emoji: "🏹", bg: "#E7F2FB", ring: "#2C7FB8" },
+  { name: "Shiva", title: "The great meditator", emoji: "🔱", bg: "#EDEBFB", ring: "#5B4FC7" },
+  { name: "Vishnu", title: "The protector", emoji: "🐚", bg: "#E3F0FB", ring: "#1E6FBF" },
+  { name: "Lakshmi", title: "Goddess of wealth", emoji: "🪷", bg: "#FFF0D9", ring: "#D99A1B" },
+  { name: "Saraswati", title: "Goddess of knowledge", emoji: "🦢", bg: "#F2F2FB", ring: "#8C7BC7" },
+  { name: "Durga", title: "Warrior goddess", emoji: "🦁", bg: "#FFE7E7", ring: "#C23B3B" },
+  { name: "Surya", title: "The sun god", emoji: "☀️", bg: "#FFF3D0", ring: "#E8A400" },
+];
+
+function HinduGodsTapGame() {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [bursts, setBursts] = useState([]);
+  const [tapped, setTapped] = useState(() => new Set());
+  const timeoutRef = useRef(null);
+
+  const speak = (text, rate = 0.9, pitch = 1.05) => {
+    if (!("speechSynthesis" in window)) return;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = rate;
+    utter.pitch = pitch;
+    window.speechSynthesis.speak(utter);
+  };
+
+  const handleTap = (god, index) => {
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    clearTimeout(timeoutRef.current);
+
+    setActiveIndex(index);
+    setTapped((prev) => new Set(prev).add(index));
+
+    const burstId = Date.now();
+    setBursts((prev) => [...prev, { id: burstId, index }]);
+    setTimeout(() => {
+      setBursts((prev) => prev.filter((b) => b.id !== burstId));
+    }, 700);
+
+    speak(god.name, 0.9, 1.05);
+    timeoutRef.current = setTimeout(() => {
+      speak(god.title, 0.85, 1);
+    }, 800);
+
+    setTimeout(() => setActiveIndex(null), 1200);
+  };
+
+  const progress = tapped.size;
+  const total = GODS.length;
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100%",
+        background:
+          "radial-gradient(circle at 20% 20%, #FFF8EA 0%, #FDECC8 45%, #FADFA0 100%)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "28px 16px 40px",
+        fontFamily: "'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', sans-serif",
+        boxSizing: "border-box",
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap');
+
+        @keyframes pop {
+          0% { transform: scale(1); }
+          35% { transform: scale(1.18) rotate(-3deg); }
+          60% { transform: scale(0.96) rotate(2deg); }
+          100% { transform: scale(1.06); }
+        }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 0px 0px var(--ring); }
+          50% { box-shadow: 0 0 0 14px var(--ring); }
+        }
+        @keyframes sparkleOut {
+          0% { transform: translate(0,0) scale(0.4); opacity: 1; }
+          100% { transform: translate(var(--tx), var(--ty)) scale(1.1); opacity: 0; }
+        }
+        .tile {
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .tile:active {
+          transform: scale(0.94);
+        }
+        .tile.active {
+          animation: pop 0.5s ease, glow 0.6s ease;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .tile.active { animation: none; }
+        }
+      `}</style>
+
+      <h1
+        style={{
+          fontFamily: "'Baloo 2', sans-serif",
+          fontWeight: 800,
+          fontSize: "clamp(28px, 6vw, 44px)",
+          color: "#7A4A1E",
+          margin: "4px 0 4px",
+          textAlign: "center",
+          letterSpacing: "0.5px",
+        }}
+      >
+        🪷 Tap a God! 🪷
+      </h1>
+      <p
+        style={{
+          color: "#A16B3B",
+          fontSize: "clamp(15px, 3vw, 19px)",
+          fontWeight: 600,
+          margin: "0 0 10px",
+          textAlign: "center",
+        }}
+      >
+        Learn their name and what they're known for
+      </p>
+
+      <div
+        style={{
+          margin: "0 0 22px",
+          height: "10px",
+          width: "min(80%, 320px)",
+          borderRadius: "999px",
+          background: "rgba(122, 74, 30, 0.14)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            width: `${(progress / total) * 100}%`,
+            borderRadius: "999px",
+            background: "#E07A2C",
+            transition: "width 0.4s ease",
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+          gap: "18px",
+          width: "100%",
+          maxWidth: "700px",
+        }}
+      >
+        {GODS.map((god, index) => {
+          const isActive = activeIndex === index;
+          const burst = bursts.find((b) => b.index === index);
+          const isLearned = tapped.has(index);
+          return (
+            <button
+              key={god.name}
+              onClick={() => handleTap(god, index)}
+              className={`tile${isActive ? " active" : ""}`}
+              style={{
+                "--ring": god.ring,
+                position: "relative",
+                border: isLearned ? `2px solid ${god.ring}` : "2px solid transparent",
+                borderRadius: "28px",
+                background: god.bg,
+                aspectRatio: "1 / 1",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                boxShadow: isActive
+                  ? `0 8px 0 ${god.ring}`
+                  : `0 6px 0 ${god.ring}`,
+                outline: "none",
+                overflow: "visible",
+                padding: "8px",
+              }}
+              aria-label={`${god.name}, ${god.title}`}
+            >
+              <span
+                style={{
+                  fontSize: "clamp(44px, 9vw, 64px)",
+                  lineHeight: 1,
+                  filter: isActive
+                    ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))"
+                    : "none",
+                }}
+              >
+                {god.emoji}
+              </span>
+              <span
+                style={{
+                  marginTop: "8px",
+                  fontFamily: "'Baloo 2', sans-serif",
+                  fontWeight: 800,
+                  fontSize: "clamp(15px, 3vw, 19px)",
+                  color: "#5A3A1A",
+                }}
+              >
+                {god.name}
+              </span>
+
+              {isActive && (
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: "-10px",
+                    background: "#fff",
+                    color: god.ring,
+                    fontWeight: 700,
+                    fontFamily: "'Baloo 2', sans-serif",
+                    fontSize: "12px",
+                    padding: "3px 10px",
+                    borderRadius: "999px",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                    whiteSpace: "nowrap",
+                    maxWidth: "92%",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {god.title}
+                </span>
+              )}
+
+              {burst &&
+                Array.from({ length: 6 }).map((_, i) => {
+                  const angle = (i / 6) * 2 * Math.PI;
+                  const tx = Math.cos(angle) * 55;
+                  const ty = Math.sin(angle) * 55;
+                  return (
+                    <span
+                      key={i}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        background: god.ring,
+                        "--tx": `${tx}px`,
+                        "--ty": `${ty}px`,
+                        animation: "sparkleOut 0.7s ease-out forwards",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  );
+                })}
+            </button>
+          );
+        })}
+      </div>
+
+      <p
+        style={{
+          marginTop: "28px",
+          color: "#B98A5C",
+          fontSize: "13px",
+          textAlign: "center",
+        }}
+      >
+        Turn your device volume up 🔊 &middot; {progress}/{total} learned
+      </p>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<HinduGodsTapGame />);
+</script>
+</body>
+</html>

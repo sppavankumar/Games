@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Tap a Flag! 🌍</title>
+<meta name="description" content="A simple tap-to-hear country flags game for toddlers." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌍</text></svg>" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+<script type="text/babel" data-type="module">
+const { useState, useRef } = React;
+
+const COUNTRIES = [
+  { name: "United States", emoji: "🇺🇸", bg: "#DCE8FB", ring: "#2B4593" },
+  { name: "China", emoji: "🇨🇳", bg: "#FFE1E1", ring: "#DE2910" },
+  { name: "Germany", emoji: "🇩🇪", bg: "#FFF3D6", ring: "#000000" },
+  { name: "India", emoji: "🇮🇳", bg: "#FFF0D6", ring: "#FF9933" },
+  { name: "Japan", emoji: "🇯🇵", bg: "#FFE9E9", ring: "#BC002D" },
+  { name: "United Kingdom", emoji: "🇬🇧", bg: "#E3E9FB", ring: "#00247D" },
+  { name: "France", emoji: "🇫🇷", bg: "#E9EEFB", ring: "#0055A4" },
+  { name: "Italy", emoji: "🇮🇹", bg: "#E5F7EA", ring: "#009246" },
+  { name: "Russia", emoji: "🇷🇺", bg: "#E7ECFB", ring: "#0039A6" },
+  { name: "Canada", emoji: "🇨🇦", bg: "#FFE5E5", ring: "#FF0000" },
+  { name: "Brazil", emoji: "🇧🇷", bg: "#E8F7E0", ring: "#009B3A" },
+  { name: "Spain", emoji: "🇪🇸", bg: "#FFF3D0", ring: "#AA151B" },
+  { name: "Mexico", emoji: "🇲🇽", bg: "#E5F7E5", ring: "#006341" },
+  { name: "Australia", emoji: "🇦🇺", bg: "#E3E9FB", ring: "#00008B" },
+  { name: "South Korea", emoji: "🇰🇷", bg: "#F2F2F2", ring: "#CD2E3A" },
+  { name: "Turkey", emoji: "🇹🇷", bg: "#FFE1E1", ring: "#E30A17" },
+  { name: "Indonesia", emoji: "🇮🇩", bg: "#FFE1E1", ring: "#CE1126" },
+  { name: "Netherlands", emoji: "🇳🇱", bg: "#FFE7E7", ring: "#AE1C28" },
+  { name: "Saudi Arabia", emoji: "🇸🇦", bg: "#E5F7E9", ring: "#006C35" },
+  { name: "Poland", emoji: "🇵🇱", bg: "#FFE9E9", ring: "#DC143C" },
+];
+
+function FlagTapGame() {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [bursts, setBursts] = useState([]);
+  const [tapped, setTapped] = useState(() => new Set());
+  const timeoutRef = useRef(null);
+
+  const speak = (text, rate = 0.9, pitch = 1.05) => {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = rate;
+    utter.pitch = pitch;
+    window.speechSynthesis.speak(utter);
+  };
+
+  const handleTap = (country, index) => {
+    clearTimeout(timeoutRef.current);
+    setActiveIndex(index);
+    setTapped((prev) => new Set(prev).add(index));
+
+    const burstId = Date.now();
+    setBursts((prev) => [...prev, { id: burstId, index }]);
+    setTimeout(() => {
+      setBursts((prev) => prev.filter((b) => b.id !== burstId));
+    }, 700);
+
+    speak(country.name);
+    timeoutRef.current = setTimeout(() => setActiveIndex(null), 1000);
+  };
+
+  const progress = tapped.size;
+  const total = COUNTRIES.length;
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        width: "100%",
+        background:
+          "radial-gradient(circle at 20% 20%, #F2F8FF 0%, #E4EEFC 45%, #D6E4F7 100%)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "28px 16px 40px",
+        fontFamily: "'Baloo 2', 'Comic Sans MS', 'Trebuchet MS', sans-serif",
+        boxSizing: "border-box",
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap');
+
+        @keyframes pop {
+          0% { transform: scale(1); }
+          35% { transform: scale(1.18) rotate(-3deg); }
+          60% { transform: scale(0.96) rotate(2deg); }
+          100% { transform: scale(1.06); }
+        }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 0px 0px var(--ring); }
+          50% { box-shadow: 0 0 0 14px var(--ring); }
+        }
+        @keyframes sparkleOut {
+          0% { transform: translate(0,0) scale(0.4); opacity: 1; }
+          100% { transform: translate(var(--tx), var(--ty)) scale(1.1); opacity: 0; }
+        }
+        .tile {
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .tile:active {
+          transform: scale(0.94);
+        }
+        .tile.active {
+          animation: pop 0.5s ease, glow 0.6s ease;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .tile.active { animation: none; }
+        }
+      `}</style>
+
+      <h1
+        style={{
+          fontFamily: "'Baloo 2', sans-serif",
+          fontWeight: 800,
+          fontSize: "clamp(28px, 6vw, 44px)",
+          color: "#1E3A6E",
+          margin: "4px 0 4px",
+          textAlign: "center",
+          letterSpacing: "0.5px",
+        }}
+      >
+        🌍 Tap a Flag! 🌍
+      </h1>
+      <p
+        style={{
+          color: "#4A6690",
+          fontSize: "clamp(15px, 3vw, 19px)",
+          fontWeight: 600,
+          margin: "0 0 10px",
+          textAlign: "center",
+        }}
+      >
+        Listen to the country's name
+      </p>
+
+      <div
+        style={{
+          margin: "0 0 22px",
+          height: "10px",
+          width: "min(80%, 320px)",
+          borderRadius: "999px",
+          background: "rgba(30, 58, 110, 0.12)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            width: `${(progress / total) * 100}%`,
+            borderRadius: "999px",
+            background: "#2B4593",
+            transition: "width 0.4s ease",
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+          gap: "16px",
+          width: "100%",
+          maxWidth: "760px",
+        }}
+      >
+        {COUNTRIES.map((country, index) => {
+          const isActive = activeIndex === index;
+          const burst = bursts.find((b) => b.index === index);
+          const isLearned = tapped.has(index);
+          return (
+            <button
+              key={country.name}
+              onClick={() => handleTap(country, index)}
+              className={`tile${isActive ? " active" : ""}`}
+              style={{
+                "--ring": country.ring,
+                position: "relative",
+                border: isLearned ? `2px solid ${country.ring}` : "2px solid transparent",
+                borderRadius: "24px",
+                background: country.bg,
+                aspectRatio: "1 / 1",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                boxShadow: isActive
+                  ? `0 8px 0 ${country.ring}`
+                  : `0 6px 0 ${country.ring}`,
+                outline: "none",
+                overflow: "visible",
+                padding: "6px",
+              }}
+              aria-label={`${country.name}`}
+            >
+              <span
+                style={{
+                  fontSize: "clamp(38px, 8vw, 56px)",
+                  lineHeight: 1,
+                  filter: isActive
+                    ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))"
+                    : "none",
+                }}
+              >
+                {country.emoji}
+              </span>
+              <span
+                style={{
+                  marginTop: "6px",
+                  fontFamily: "'Baloo 2', sans-serif",
+                  fontWeight: 800,
+                  fontSize: "clamp(12px, 2.4vw, 15px)",
+                  color: "#1E3A6E",
+                  textAlign: "center",
+                  lineHeight: 1.15,
+                }}
+              >
+                {country.name}
+              </span>
+
+              {burst &&
+                Array.from({ length: 6 }).map((_, i) => {
+                  const angle = (i / 6) * 2 * Math.PI;
+                  const tx = Math.cos(angle) * 50;
+                  const ty = Math.sin(angle) * 50;
+                  return (
+                    <span
+                      key={i}
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "9px",
+                        height: "9px",
+                        borderRadius: "50%",
+                        background: country.ring,
+                        "--tx": `${tx}px`,
+                        "--ty": `${ty}px`,
+                        animation: "sparkleOut 0.7s ease-out forwards",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  );
+                })}
+            </button>
+          );
+        })}
+      </div>
+
+      <p
+        style={{
+          marginTop: "28px",
+          color: "#4A6690",
+          fontSize: "13px",
+          textAlign: "center",
+        }}
+      >
+        Turn your device volume up 🔊 &middot; {progress}/{total} learned
+      </p>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<FlagTapGame />);
+</script>
+</body>
+</html>
