@@ -22,16 +22,16 @@
 const { useState, useRef } = React;
 
 const GODS = [
-  { name: "Ganesha", title: "Remover of obstacles", emoji: "🐘", bg: "#FFE9D6", ring: "#E07A2C" },
-  { name: "Krishna", title: "Playful and wise", emoji: "🪈", bg: "#E3ECFB", ring: "#3B5FCC" },
-  { name: "Hanuman", title: "Strong and devoted", emoji: "🐒", bg: "#FFE3D0", ring: "#D9531E" },
-  { name: "Rama", title: "Brave and honest", emoji: "🏹", bg: "#E7F2FB", ring: "#2C7FB8" },
-  { name: "Shiva", title: "The great meditator", emoji: "🔱", bg: "#EDEBFB", ring: "#5B4FC7" },
-  { name: "Vishnu", title: "The protector", emoji: "🐚", bg: "#E3F0FB", ring: "#1E6FBF" },
-  { name: "Lakshmi", title: "Goddess of wealth", emoji: "🪷", bg: "#FFF0D9", ring: "#D99A1B" },
-  { name: "Saraswati", title: "Goddess of knowledge", emoji: "🦢", bg: "#F2F2FB", ring: "#8C7BC7" },
-  { name: "Durga", title: "Warrior goddess", emoji: "🦁", bg: "#FFE7E7", ring: "#C23B3B" },
-  { name: "Surya", title: "The sun god", emoji: "☀️", bg: "#FFF3D0", ring: "#E8A400" },
+  { name: "Ganesha", title: "Remover of obstacles", emoji: "🐘", image: "images/ganesha.jpeg", bg: "#FFE9D6", ring: "#E07A2C" },
+  { name: "Krishna", title: "Playful and wise", emoji: "🪈", image: "images/krishna.jpeg", bg: "#E3ECFB", ring: "#3B5FCC" },
+  { name: "Hanuman", title: "Strong and devoted", emoji: "🐒", image: "images/hanuman.jpeg", bg: "#FFE3D0", ring: "#D9531E" },
+  { name: "Rama", title: "Brave and honest", emoji: "🏹", image: "images/rama.jpeg", bg: "#E7F2FB", ring: "#2C7FB8" },
+  { name: "Shiva", title: "The great meditator", emoji: "🔱", image: "images/shiva.jpeg", bg: "#EDEBFB", ring: "#5B4FC7" },
+  { name: "Vishnu", title: "The protector", emoji: "🐚", image: "images/vishnu.jpeg", bg: "#E3F0FB", ring: "#1E6FBF" },
+  { name: "Lakshmi", title: "Goddess of wealth", emoji: "🪷", image: "images/lakshmi.jpeg", bg: "#FFF0D9", ring: "#D99A1B" },
+  { name: "Saraswati", title: "Goddess of knowledge", emoji: "🦢", image: "images/saraswati.jpeg", bg: "#F2F2FB", ring: "#8C7BC7" },
+  { name: "Durga", title: "Warrior goddess", emoji: "🦁", image: "images/durga.jpeg", bg: "#FFE7E7", ring: "#C23B3B" },
+  { name: "Surya", title: "The sun god", emoji: "☀️", image: "images/surya.jpeg", bg: "#FFF3D0", ring: "#E8A400" },
 ];
 
 function HinduGodsTapGame() {
@@ -203,17 +203,34 @@ function HinduGodsTapGame() {
               }}
               aria-label={`${god.name}, ${god.title}`}
             >
-              <span
-                style={{
-                  fontSize: "clamp(44px, 9vw, 64px)",
-                  lineHeight: 1,
-                  filter: isActive
-                    ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))"
-                    : "none",
-                }}
-              >
-                {god.emoji}
-              </span>
+              {god.image ? (
+                <img
+                  src={god.image}
+                  alt={god.name}
+                  style={{
+                    width: "clamp(64px, 16vw, 92px)",
+                    height: "clamp(64px, 16vw, 92px)",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    border: `3px solid ${god.ring}`,
+                    boxShadow: isActive
+                      ? "0 0 12px 2px rgba(255,255,255,0.9)"
+                      : "none",
+                  }}
+                />
+              ) : (
+                <span
+                  style={{
+                    fontSize: "clamp(44px, 9vw, 64px)",
+                    lineHeight: 1,
+                    filter: isActive
+                      ? "drop-shadow(0 0 10px rgba(255,255,255,0.9))"
+                      : "none",
+                  }}
+                >
+                  {god.emoji}
+                </span>
+              )}
               <span
                 style={{
                   marginTop: "8px",
