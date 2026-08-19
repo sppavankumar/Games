@@ -20,6 +20,18 @@ const BRANDS = [
   { name: "Toyota", slug: "toyota", color: "#B0161C", accent: "#FFFFFF" },
   { name: "Honda", slug: "honda", color: "#A6120D", accent: "#E6E6E6" },
   { name: "Hyundai", slug: "hyundai", color: "#0B3C8A", accent: "#C0C9D6" },
+  { name: "Acura", slug: "acura", color: "#0E1116", accent: "#C8102E" },
+  { name: "Aston Martin", slug: "astonmartin", color: "#00352F", accent: "#BFA25A" },
+  { name: "Buick", slug: "buick", color: "#7A0C1E", accent: "#C0C9D6" },
+  { name: "Cadillac", slug: "cadillac", color: "#0A0A0A", accent: "#C8A951" },
+  { name: "Chevrolet", slug: "chevrolet", color: "#8A1B1B", accent: "#FFD400" },
+  { name: "Ford", slug: "ford", color: "#0B3D91", accent: "#FFFFFF" },
+  { name: "GMC", slug: "gmc", color: "#7A1E1E", accent: "#E6E6E6" },
+  { name: "Infiniti", slug: "infiniti", color: "#151515", accent: "#8A8D91" },
+  { name: "Maserati", slug: "maserati", color: "#0A2F5C", accent: "#C0C9D6" },
+  { name: "Mazda", slug: "mazda", color: "#7A0E14", accent: "#E6E6E6" },
+  { name: "Nissan", slug: "nissan", color: "#8A1521", accent: "#E6E6E6" },
+  { name: "Porsche", slug: "porsche", color: "#0A1F3D", accent: "#D9A441" },
 ].map((b, i) => ({ ...b, id: i, photoUrl: `/images/${b.slug}.jpg` }));
 
 const PRAISE = ["Yay!", "Nice!", "You got it!", "Woohoo!", "Beep beep!", "Vroom!"];
