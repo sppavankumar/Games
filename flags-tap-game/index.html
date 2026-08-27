@@ -21,6 +21,18 @@
 <script type="text/babel" data-type="module">
 const { useState, useRef } = React;
 
+// ---- Shuffle helper -------------------------------------------------------
+// Fisher-Yates shuffle: returns a new array in random order without mutating
+// the input. Used so the card layout is randomized on every page load/refresh.
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 const COUNTRIES = [
   { name: "United States", emoji: "🇺🇸", bg: "#DCE8FB", ring: "#2B4593" },
   { name: "China", emoji: "🇨🇳", bg: "#FFE1E1", ring: "#DE2910" },
@@ -46,6 +58,7 @@ const COUNTRIES = [
 
 function FlagTapGame() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [items] = useState(() => shuffleArray(COUNTRIES));
   const [bursts, setBursts] = useState([]);
   const [tapped, setTapped] = useState(() => new Set());
   const timeoutRef = useRef(null);
@@ -178,7 +191,7 @@ function FlagTapGame() {
           maxWidth: "760px",
         }}
       >
-        {COUNTRIES.map((country, index) => {
+        {items.map((country, index) => {
           const isActive = activeIndex === index;
           const burst = bursts.find((b) => b.index === index);
           const isLearned = tapped.has(index);

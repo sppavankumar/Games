@@ -26,6 +26,19 @@ const ITEMS = [
   { name: "Papaya", slug: "papaya", color: "#A03A1D", accent: "#FF9F5A" },
 ].map((b, i) => ({ ...b, id: i, photoUrl: `/images/${b.slug}.jpg` }));
 
+
+// ---- Shuffle helper -------------------------------------------------------
+// Fisher-Yates shuffle: returns a new array in random order without mutating
+// the input. Used so the card layout is randomized on every page load/refresh.
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 const PRAISE = ["Yay!", "Nice!", "You got it!", "Woohoo!", "Yum!", "Delicious!"];
 
 // ---- Speech -------------------------------------------------------------
@@ -136,6 +149,7 @@ export default function App() {
   const [activeId, setActiveId] = useState(null);
   const timeoutRef = useRef(null);
   const [tapped, setTapped] = useState(() => new Set());
+  const [items] = useState(() => shuffleArray(ITEMS));
 
   const handleTap = useCallback((item) => {
     speak(item.name);
@@ -147,7 +161,7 @@ export default function App() {
   }, []);
 
   const progress = tapped.size;
-  const total = ITEMS.length;
+  const total = items.length;
 
   return (
     <div
@@ -182,7 +196,7 @@ export default function App() {
       </header>
 
       <main className="mx-auto grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-4">
-        {ITEMS.map((item) => (
+        {items.map((item) => (
           <ItemCard
             key={item.id}
             item={item}

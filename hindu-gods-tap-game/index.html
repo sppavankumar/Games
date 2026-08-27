@@ -21,6 +21,18 @@
 <script type="text/babel" data-type="module">
 const { useState, useRef } = React;
 
+// ---- Shuffle helper -------------------------------------------------------
+// Fisher-Yates shuffle: returns a new array in random order without mutating
+// the input. Used so the card layout is randomized on every page load/refresh.
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 const GODS = [
   { name: "Ganesha", title: "Remover of obstacles", emoji: "🐘", image: "images/ganesha.jpeg", bg: "#FFE9D6", ring: "#E07A2C" },
   { name: "Krishna", title: "Playful and wise", emoji: "🪈", image: "images/krishna.jpeg", bg: "#E3ECFB", ring: "#3B5FCC" },
@@ -36,6 +48,7 @@ const GODS = [
 
 function HinduGodsTapGame() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [items] = useState(() => shuffleArray(GODS));
   const [bursts, setBursts] = useState([]);
   const [tapped, setTapped] = useState(() => new Set());
   const timeoutRef = useRef(null);
@@ -173,7 +186,7 @@ function HinduGodsTapGame() {
           maxWidth: "700px",
         }}
       >
-        {GODS.map((god, index) => {
+        {items.map((god, index) => {
           const isActive = activeIndex === index;
           const burst = bursts.find((b) => b.index === index);
           const isLearned = tapped.has(index);
