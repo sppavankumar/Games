@@ -10,3 +10,4 @@ Simple, free, tap-to-play games for toddlers — hosted on GitHub Pages so they'
 - **Flags Tap Game** — tap a country's flag to hear its name; 20 countries from around the world. [Play](https://sppavankumar.github.io/Games/flags-tap-game/) · [source](flags-tap-game/index.html)
 - **Hindu Gods Tap Game** — tap a deity's well-known symbol to hear their name and what they're known for; 10 major Hindu gods and goddesses. [Play](https://sppavankumar.github.io/Games/hindu-gods-tap-game/) · [source](hindu-gods-tap-game/index.html)
 - **Car Brands Tap Game** — tap a car brand's logo to hear its name; 24 car brands from around the world. [Play](https://sppavankumar.github.io/Games/car-tap-game/) · [source](car-tap-game/index.html)
+- **Fruits Tap Game** — tap a fruit to hear its name; 16 fruits from around the world. [Play](https://sppavankumar.github.io/Games/fruits-tap-game/) · [source](fruits-tap-game/index.html)
