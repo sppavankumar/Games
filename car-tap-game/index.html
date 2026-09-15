@@ -97,6 +97,18 @@
       { name: "Volvo",         slug: "volvo",         color: "#1A1A1A", accent: "#C0C9D6" },
     ].map((b, i) => ({ ...b, id: i, photoUrl: `images/${b.slug}.jpg` }));
 
+    // ---- Shuffle helper ---------------------------------------------------------
+    // Fisher-Yates shuffle: returns a new array in random order without mutating
+    // the input. Used so the card layout is randomized on every page load/refresh.
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
     const PRAISE = ["Yay!", "Nice!", "You got it!", "Woohoo!", "Beep beep!", "Vroom!"];
 
     // ---- Speech -------------------------------------------------------------
@@ -202,6 +214,7 @@
     // ---- Main app -----------------------------------------------------------
     function App() {
       const [activeId, setActiveId] = useState(null);
+      const [items] = useState(() => shuffleArray(BRANDS));
       const timeoutRef = useRef(null);
       const [tapped, setTapped] = useState(() => new Set());
 
@@ -215,7 +228,7 @@
       }, []);
 
       const progress = tapped.size;
-      const total = BRANDS.length;
+      const total = items.length;
 
       return (
         <div
@@ -246,7 +259,7 @@
           </header>
 
           <main className="mx-auto grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-4">
-            {BRANDS.map((brand) => (
+            {items.map((brand) => (
               <BrandCard key={brand.id} brand={brand} onTap={handleTap} isActive={activeId === brand.id} />
             ))}
           </main>

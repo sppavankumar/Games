@@ -21,6 +21,18 @@
 <script type="text/babel" data-type="module">
 const { useState, useRef } = React;
 
+// ---- Shuffle helper -------------------------------------------------------
+// Fisher-Yates shuffle: returns a new array in random order without mutating
+// the input. Used so the card layout is randomized on every page load/refresh.
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 const COUNTRIES = [
   { name: "United States", emoji: "🇺🇸", bg: "#DCE8FB", ring: "#2B4593" },
   { name: "China", emoji: "🇨🇳", bg: "#FFE1E1", ring: "#DE2910" },
@@ -62,10 +74,22 @@ const COUNTRIES = [
   { name: "Nigeria", emoji: "🇳🇬", bg: "#E3F5EC", ring: "#008751" },
   { name: "Kazakhstan", emoji: "🇰🇿", bg: "#E3F7FB", ring: "#00AFCA" },
   { name: "Finland", emoji: "🇫🇮", bg: "#E3E9F7", ring: "#003580" },
+  { name: "Switzerland", emoji: "🇨🇭", bg: "#FFE5E5", ring: "#D52B1E" },
+  { name: "Taiwan", emoji: "🇹🇼", bg: "#FFE9E9", ring: "#FE0000" },
+  { name: "Ireland", emoji: "🇮🇪", bg: "#E5F7EA", ring: "#169B62" },
+  { name: "Belgium", emoji: "🇧🇪", bg: "#FFF9E5", ring: "#ED2939" },
+  { name: "Sweden", emoji: "🇸🇪", bg: "#FFF7E0", ring: "#006AA7" },
+  { name: "Israel", emoji: "🇮🇱", bg: "#E3E9FB", ring: "#0038B8" },
+  { name: "Argentina", emoji: "🇦🇷", bg: "#EAF4FF", ring: "#74ACDF" },
+  { name: "Singapore", emoji: "🇸🇬", bg: "#FFE5E5", ring: "#EF3340" },
+  { name: "Austria", emoji: "🇦🇹", bg: "#FFE9E9", ring: "#ED2939" },
+  { name: "United Arab Emirates", emoji: "🇦🇪", bg: "#E5F7E9", ring: "#00732F" },
+  { name: "New Zealand", emoji: "🇳🇿", bg: "#E3E9FB", ring: "#00247D" },
 ];
 
 function FlagTapGame() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [items] = useState(() => shuffleArray(COUNTRIES));
   const [bursts, setBursts] = useState([]);
   const [tapped, setTapped] = useState(() => new Set());
   const timeoutRef = useRef(null);
@@ -198,7 +222,7 @@ function FlagTapGame() {
           maxWidth: "760px",
         }}
       >
-        {COUNTRIES.map((country, index) => {
+        {items.map((country, index) => {
           const isActive = activeIndex === index;
           const burst = bursts.find((b) => b.index === index);
           const isLearned = tapped.has(index);
