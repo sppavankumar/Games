@@ -62,12 +62,397 @@ const COUNTRIES = [
   { name: "Nigeria", emoji: "🇳🇬", bg: "#E3F5EC", ring: "#008751" },
   { name: "Kazakhstan", emoji: "🇰🇿", bg: "#E3F7FB", ring: "#00AFCA" },
   { name: "Finland", emoji: "🇫🇮", bg: "#E3E9F7", ring: "#003580" },
+  { name: "Afghanistan", emoji: "🇦🇫", bg: "#DBDBDB", ring: "#000000" },
+  { name: "Albania", emoji: "🇦🇱", bg: "#FBE0E0", ring: "#E41E20" },
+  { name: "Algeria", emoji: "🇩🇿", bg: "#DBE9E2", ring: "#006233" },
+  { name: "Andorra", emoji: "🇦🇩", bg: "#DEDCF2", ring: "#10069F" },
+  { name: "Angola", emoji: "🇦🇴", bg: "#F8DDE2", ring: "#CC092F" },
+  { name: "Antigua and Barbuda", emoji: "🇦🇬", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Argentina", emoji: "🇦🇷", bg: "#ECF3FB", ring: "#74ACDF" },
+  { name: "Armenia", emoji: "🇦🇲", bg: "#FADBDE", ring: "#D90012" },
+  { name: "Austria", emoji: "🇦🇹", bg: "#FCE1E3", ring: "#ED2939" },
+  { name: "Azerbaijan", emoji: "🇦🇿", bg: "#DBF0F6", ring: "#0092BC" },
+  { name: "Bahamas", emoji: "🇧🇸", bg: "#DBECEF", ring: "#00778B" },
+  { name: "Bahrain", emoji: "🇧🇭", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Barbados", emoji: "🇧🇧", bg: "#DBE1ED", ring: "#00267F" },
+  { name: "Belarus", emoji: "🇧🇾", bg: "#F7E2E4", ring: "#C8313E" },
+  { name: "Belgium", emoji: "🇧🇪", bg: "#FFFAE0", ring: "#FDDA24" },
+  { name: "Belize", emoji: "🇧🇿", bg: "#DBE4EE", ring: "#003F87" },
+  { name: "Benin", emoji: "🇧🇯", bg: "#DBEEE7", ring: "#008751" },
+  { name: "Bhutan", emoji: "🇧🇹", bg: "#FFE6DE", ring: "#FF4E12" },
+  { name: "Bolivia", emoji: "🇧🇴", bg: "#DBECE3", ring: "#007934" },
+  { name: "Bosnia and Herzegovina", emoji: "🇧🇦", bg: "#DBE0F0", ring: "#002395" },
+  { name: "Botswana", emoji: "🇧🇼", bg: "#ECF3FA", ring: "#75AADB" },
+  { name: "Brunei", emoji: "🇧🇳", bg: "#FEFBDF", ring: "#F7E017" },
+  { name: "Bulgaria", emoji: "🇧🇬", bg: "#DBF0EB", ring: "#00966E" },
+  { name: "Burkina Faso", emoji: "🇧🇫", bg: "#FDE1E2", ring: "#EF2B2D" },
+  { name: "Burundi", emoji: "🇧🇮", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Cambodia", emoji: "🇰🇭", bg: "#DCE2F2", ring: "#032EA1" },
+  { name: "Cameroon", emoji: "🇨🇲", bg: "#DBECE8", ring: "#007A5E" },
+  { name: "Cape Verde", emoji: "🇨🇻", bg: "#DBE3F0", ring: "#003893" },
+  { name: "Central African Republic", emoji: "🇨🇫", bg: "#DBE2EE", ring: "#003082" },
+  { name: "Chad", emoji: "🇹🇩", bg: "#DBE1E9", ring: "#002664" },
+  { name: "Comoros", emoji: "🇰🇲", bg: "#E3ECF7", ring: "#3A75C4" },
+  { name: "Costa Rica", emoji: "🇨🇷", bg: "#DBE1ED", ring: "#002B7F" },
+  { name: "Croatia", emoji: "🇭🇷", bg: "#DFDFF0", ring: "#171796" },
+  { name: "Cuba", emoji: "🇨🇺", bg: "#DBE1EF", ring: "#002A8F" },
+  { name: "Cyprus", emoji: "🇨🇾", bg: "#F9ECDB", ring: "#D57800" },
+  { name: "DR Congo", emoji: "🇨🇩", bg: "#DBEDFF", ring: "#007FFF" },
+  { name: "Djibouti", emoji: "🇩🇯", bg: "#EAF4FC", ring: "#6AB2E7" },
+  { name: "Dominica", emoji: "🇩🇲", bg: "#DBEAE4", ring: "#006B3F" },
+  { name: "Dominican Republic", emoji: "🇩🇴", bg: "#DBE2E9", ring: "#002D62" },
+  { name: "Ecuador", emoji: "🇪🇨", bg: "#FFFADB", ring: "#FFDD00" },
+  { name: "El Salvador", emoji: "🇸🇻", bg: "#DDE5F4", ring: "#0F47AF" },
+  { name: "Equatorial Guinea", emoji: "🇬🇶", bg: "#E4F1DB", ring: "#3E9A00" },
+  { name: "Eritrea", emoji: "🇪🇷", bg: "#FCDCE3", ring: "#EA0437" },
+  { name: "Estonia", emoji: "🇪🇪", bg: "#DBEBF8", ring: "#0072CE" },
+  { name: "Eswatini", emoji: "🇸🇿", bg: "#E4E8F5", ring: "#3E5EB9" },
+  { name: "Ethiopia", emoji: "🇪🇹", bg: "#DCEEE2", ring: "#078930" },
+  { name: "Fiji", emoji: "🇫🇯", bg: "#EAF6FB", ring: "#68BFE5" },
+  { name: "Gabon", emoji: "🇬🇦", bg: "#DBF1E9", ring: "#009E60" },
+  { name: "Gambia", emoji: "🇬🇲", bg: "#E3ECE1", ring: "#3A7728" },
+  { name: "Georgia", emoji: "🇬🇪", bg: "#FFDBDB", ring: "#FF0000" },
+  { name: "Ghana", emoji: "🇬🇭", bg: "#DBEAE4", ring: "#006B3F" },
+  { name: "Greece", emoji: "🇬🇷", bg: "#DDE8F4", ring: "#0D5EAF" },
+  { name: "Grenada", emoji: "🇬🇩", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Guatemala", emoji: "🇬🇹", bg: "#E6F0F8", ring: "#4997D0" },
+  { name: "Guinea", emoji: "🇬🇳", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Guinea-Bissau", emoji: "🇬🇼", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Guyana", emoji: "🇬🇾", bg: "#DBF1E6", ring: "#009E49" },
+  { name: "Haiti", emoji: "🇭🇹", bg: "#DBE0F2", ring: "#00209F" },
+  { name: "Honduras", emoji: "🇭🇳", bg: "#DBEBF8", ring: "#0073CF" },
+  { name: "Hungary", emoji: "🇭🇺", bg: "#E5EBE6", ring: "#436F4D" },
+  { name: "Iceland", emoji: "🇮🇸", bg: "#DCE7F1", ring: "#02529C" },
+  { name: "Iran", emoji: "🇮🇷", bg: "#E0F2E4", ring: "#239F40" },
+  { name: "Iraq", emoji: "🇮🇶", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Ireland", emoji: "🇮🇪", bg: "#DEF1E9", ring: "#169B62" },
+  { name: "Israel", emoji: "🇮🇱", bg: "#DBE3F5", ring: "#0038B8" },
+  { name: "Ivory Coast", emoji: "🇨🇮", bg: "#FEEDDB", ring: "#F77F00" },
+  { name: "Jamaica", emoji: "🇯🇲", bg: "#DBF1E3", ring: "#009B3A" },
+  { name: "Jordan", emoji: "🇯🇴", bg: "#DBECE4", ring: "#007A3D" },
+  { name: "Kenya", emoji: "🇰🇪", bg: "#F5DBDB", ring: "#BB0000" },
+  { name: "Kiribati", emoji: "🇰🇮", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Kosovo", emoji: "🇽🇰", bg: "#E0E6F2", ring: "#244AA5" },
+  { name: "Kuwait", emoji: "🇰🇼", bg: "#DBECE4", ring: "#007A3D" },
+  { name: "Kyrgyzstan", emoji: "🇰🇬", bg: "#FCDEE2", ring: "#E8112D" },
+  { name: "Laos", emoji: "🇱🇦", bg: "#DBE1EA", ring: "#002868" },
+  { name: "Latvia", emoji: "🇱🇻", bg: "#F1E2E3", ring: "#9E3039" },
+  { name: "Lebanon", emoji: "🇱🇧", bg: "#DBF3E7", ring: "#00A651" },
+  { name: "Lesotho", emoji: "🇱🇸", bg: "#DBE0F2", ring: "#00209F" },
+  { name: "Liberia", emoji: "🇱🇷", bg: "#F6DDE2", ring: "#BF0A30" },
+  { name: "Libya", emoji: "🇱🇾", bg: "#E0F1E5", ring: "#239E46" },
+  { name: "Liechtenstein", emoji: "🇱🇮", bg: "#DBE1ED", ring: "#002B7F" },
+  { name: "Lithuania", emoji: "🇱🇹", bg: "#DBEAE5", ring: "#006A44" },
+  { name: "Luxembourg", emoji: "🇱🇺", bg: "#DBF2FA", ring: "#00A1DE" },
+  { name: "Madagascar", emoji: "🇲🇬", bg: "#FFE4E2", ring: "#FC3D32" },
+  { name: "Malawi", emoji: "🇲🇼", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Maldives", emoji: "🇲🇻", bg: "#F9DEE3", ring: "#D21034" },
+  { name: "Mali", emoji: "🇲🇱", bg: "#DEF5E3", ring: "#14B53A" },
+  { name: "Malta", emoji: "🇲🇹", bg: "#F8DEE1", ring: "#CF142B" },
+  { name: "Marshall Islands", emoji: "🇲🇭", bg: "#DBE3F0", ring: "#003893" },
+  { name: "Mauritania", emoji: "🇲🇷", bg: "#DBF3E8", ring: "#00A95C" },
+  { name: "Mauritius", emoji: "🇲🇺", bg: "#DBF2E7", ring: "#00A551" },
+  { name: "Micronesia", emoji: "🇫🇲", bg: "#ECF4FA", ring: "#75B2DD" },
+  { name: "Moldova", emoji: "🇲🇩", bg: "#DBE5F4", ring: "#0046AE" },
+  { name: "Monaco", emoji: "🇲🇨", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Mongolia", emoji: "🇲🇳", bg: "#F7E1E2", ring: "#C4272F" },
+  { name: "Montenegro", emoji: "🇲🇪", bg: "#F7DCDC", ring: "#C40308" },
+  { name: "Morocco", emoji: "🇲🇦", bg: "#F6E1E2", ring: "#C1272D" },
+  { name: "Mozambique", emoji: "🇲🇿", bg: "#DBEBEA", ring: "#007168" },
+  { name: "Myanmar", emoji: "🇲🇲", bg: "#E3F4E2", ring: "#34B233" },
+  { name: "Namibia", emoji: "🇳🇦", bg: "#DBE3ED", ring: "#003580" },
+  { name: "Nauru", emoji: "🇳🇷", bg: "#DBE1ED", ring: "#002B7F" },
+  { name: "Nepal", emoji: "🇳🇵", bg: "#FADEE4", ring: "#DC143C" },
+  { name: "New Zealand", emoji: "🇳🇿", bg: "#DBE0ED", ring: "#00247D" },
+  { name: "Nicaragua", emoji: "🇳🇮", bg: "#DBEAF7", ring: "#0067C6" },
+  { name: "Niger", emoji: "🇳🇪", bg: "#FBE7DC", ring: "#E05206" },
+  { name: "North Korea", emoji: "🇰🇵", bg: "#DCE6F2", ring: "#024FA2" },
+  { name: "North Macedonia", emoji: "🇲🇰", bg: "#F9DBDB", ring: "#D20000" },
+  { name: "Oman", emoji: "🇴🇲", bg: "#FADEDF", ring: "#DB161B" },
+  { name: "Palau", emoji: "🇵🇼", bg: "#E6F4F9", ring: "#4AADD6" },
+  { name: "Palestine", emoji: "🇵🇸", bg: "#DBECE4", ring: "#007A3D" },
+  { name: "Panama", emoji: "🇵🇦", bg: "#DBE7F0", ring: "#005293" },
+  { name: "Papua New Guinea", emoji: "🇵🇬", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Paraguay", emoji: "🇵🇾", bg: "#DBE3F3", ring: "#0038A8" },
+  { name: "Qatar", emoji: "🇶🇦", bg: "#EFDEE3", ring: "#8A1538" },
+  { name: "Republic of the Congo", emoji: "🇨🇬", bg: "#DBF0E5", ring: "#009543" },
+  { name: "Rwanda", emoji: "🇷🇼", bg: "#DBF2FA", ring: "#00A1DE" },
+  { name: "Saint Kitts and Nevis", emoji: "🇰🇳", bg: "#DBF1E6", ring: "#009E49" },
+  { name: "Saint Lucia", emoji: "🇱🇨", bg: "#EAF8FF", ring: "#66CCFF" },
+  { name: "Saint Vincent and the Grenadines", emoji: "🇻🇨", bg: "#DBF1E9", ring: "#009E60" },
+  { name: "Samoa", emoji: "🇼🇸", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "San Marino", emoji: "🇸🇲", bg: "#E8F5FB", ring: "#5EB6E4" },
+  { name: "Sao Tome and Principe", emoji: "🇸🇹", bg: "#DEF4E1", ring: "#12AD2B" },
+  { name: "Senegal", emoji: "🇸🇳", bg: "#DBEEE4", ring: "#00853F" },
+  { name: "Serbia", emoji: "🇷🇸", bg: "#F7E3E4", ring: "#C6363C" },
+  { name: "Seychelles", emoji: "🇸🇨", bg: "#DBE4EE", ring: "#003F87" },
+  { name: "Sierra Leone", emoji: "🇸🇱", bg: "#E0F5E3", ring: "#1EB53A" },
+  { name: "Singapore", emoji: "🇸🇬", bg: "#FDE2E4", ring: "#EF3340" },
+  { name: "Slovakia", emoji: "🇸🇰", bg: "#DDE6F2", ring: "#0B4EA2" },
+  { name: "Slovenia", emoji: "🇸🇮", bg: "#DBE8F2", ring: "#005DA4" },
+  { name: "Solomon Islands", emoji: "🇸🇧", bg: "#DBE7F5", ring: "#0051BA" },
+  { name: "Somalia", emoji: "🇸🇴", bg: "#E4EEFA", ring: "#4189DD" },
+  { name: "South Sudan", emoji: "🇸🇸", bg: "#DCEEE2", ring: "#078930" },
+  { name: "Sri Lanka", emoji: "🇱🇰", bg: "#EFDEE3", ring: "#8D153A" },
+  { name: "Sudan", emoji: "🇸🇩", bg: "#F9DEE3", ring: "#D21034" },
+  { name: "Suriname", emoji: "🇸🇷", bg: "#E3EDE4", ring: "#377E3F" },
+  { name: "Sweden", emoji: "🇸🇪", bg: "#DBEAF3", ring: "#006AA7" },
+  { name: "Switzerland", emoji: "🇨🇭", bg: "#FAE1DF", ring: "#DA291C" },
+  { name: "Syria", emoji: "🇸🇾", bg: "#DBECE4", ring: "#007A3D" },
+  { name: "Taiwan", emoji: "🇹🇼", bg: "#DBDBF0", ring: "#000095" },
+  { name: "Tajikistan", emoji: "🇹🇯", bg: "#DBEADB", ring: "#006600" },
+  { name: "Tanzania", emoji: "🇹🇿", bg: "#E0F5E3", ring: "#1EB53A" },
+  { name: "Timor-Leste", emoji: "🇹🇱", bg: "#FAE0E0", ring: "#DC241F" },
+  { name: "Togo", emoji: "🇹🇬", bg: "#DBEAE6", ring: "#006A4E" },
+  { name: "Tonga", emoji: "🇹🇴", bg: "#F6DBDB", ring: "#C10000" },
+  { name: "Trinidad and Tobago", emoji: "🇹🇹", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Tunisia", emoji: "🇹🇳", bg: "#FCDBDE", ring: "#E70013" },
+  { name: "Turkmenistan", emoji: "🇹🇲", bg: "#DBEEE4", ring: "#00843D" },
+  { name: "Tuvalu", emoji: "🇹🇻", bg: "#DBE0EA", ring: "#012169" },
+  { name: "Uganda", emoji: "🇺🇬", bg: "#FADBDB", ring: "#D90000" },
+  { name: "Ukraine", emoji: "🇺🇦", bg: "#DBE7F5", ring: "#0057B7" },
+  { name: "United Arab Emirates", emoji: "🇦🇪", bg: "#DBEBE2", ring: "#00732F" },
+  { name: "Uruguay", emoji: "🇺🇾", bg: "#DBE3F3", ring: "#0038A8" },
+  { name: "Uzbekistan", emoji: "🇺🇿", bg: "#DBF1F5", ring: "#0099B5" },
+  { name: "Vanuatu", emoji: "🇻🇺", bg: "#DBF0E5", ring: "#009543" },
+  { name: "Vatican City", emoji: "🇻🇦", bg: "#FFFBDB", ring: "#FFE000" },
+  { name: "Venezuela", emoji: "🇻🇪", bg: "#DBE0ED", ring: "#00247D" },
+  { name: "Yemen", emoji: "🇾🇪", bg: "#F8DEE1", ring: "#CE1126" },
+  { name: "Zambia", emoji: "🇿🇲", bg: "#DFEFDB", ring: "#198A00" },
+  { name: "Zimbabwe", emoji: "🇿🇼", bg: "#DBE9DB", ring: "#006400" },
 ];
+
+// Region tabs. Each country belongs to exactly one region (looked up by name).
+const REGIONS = [
+  { id: "All", label: "All", icon: "🌍", say: "All the flags" },
+  { id: "Africa", label: "Africa", icon: "🦁", say: "Africa" },
+  { id: "Americas", label: "Americas", icon: "🌎", say: "Americas" },
+  { id: "Asia", label: "Asia", icon: "🐼", say: "Asia" },
+  { id: "Europe", label: "Europe", icon: "🏰", say: "Europe" },
+  { id: "Oceania", label: "Oceania", icon: "🐨", say: "Oceania" },
+];
+
+const REGION_COUNTRIES = {
+  Africa: [
+    "Algeria",
+    "Angola",
+    "Benin",
+    "Botswana",
+    "Burkina Faso",
+    "Burundi",
+    "Cape Verde",
+    "Cameroon",
+    "Central African Republic",
+    "Chad",
+    "Comoros",
+    "Republic of the Congo",
+    "DR Congo",
+    "Djibouti",
+    "Egypt",
+    "Equatorial Guinea",
+    "Eritrea",
+    "Eswatini",
+    "Ethiopia",
+    "Gabon",
+    "Gambia",
+    "Ghana",
+    "Guinea",
+    "Guinea-Bissau",
+    "Ivory Coast",
+    "Kenya",
+    "Lesotho",
+    "Liberia",
+    "Libya",
+    "Madagascar",
+    "Malawi",
+    "Mali",
+    "Mauritania",
+    "Mauritius",
+    "Morocco",
+    "Mozambique",
+    "Namibia",
+    "Niger",
+    "Nigeria",
+    "Rwanda",
+    "Sao Tome and Principe",
+    "Senegal",
+    "Seychelles",
+    "Sierra Leone",
+    "Somalia",
+    "South Africa",
+    "South Sudan",
+    "Sudan",
+    "Tanzania",
+    "Togo",
+    "Tunisia",
+    "Uganda",
+    "Zambia",
+    "Zimbabwe",
+  ],
+  Americas: [
+    "United States",
+    "Canada",
+    "Mexico",
+    "Brazil",
+    "Colombia",
+    "Chile",
+    "Peru",
+    "Antigua and Barbuda",
+    "Argentina",
+    "Bahamas",
+    "Barbados",
+    "Belize",
+    "Bolivia",
+    "Costa Rica",
+    "Cuba",
+    "Dominica",
+    "Dominican Republic",
+    "Ecuador",
+    "El Salvador",
+    "Grenada",
+    "Guatemala",
+    "Guyana",
+    "Haiti",
+    "Honduras",
+    "Jamaica",
+    "Nicaragua",
+    "Panama",
+    "Paraguay",
+    "Saint Kitts and Nevis",
+    "Saint Lucia",
+    "Saint Vincent and the Grenadines",
+    "Suriname",
+    "Trinidad and Tobago",
+    "Uruguay",
+    "Venezuela",
+  ],
+  Asia: [
+    "China",
+    "India",
+    "Japan",
+    "South Korea",
+    "Turkey",
+    "Indonesia",
+    "Saudi Arabia",
+    "Thailand",
+    "Vietnam",
+    "Malaysia",
+    "Philippines",
+    "Bangladesh",
+    "Hong Kong",
+    "Pakistan",
+    "Kazakhstan",
+    "Afghanistan",
+    "Armenia",
+    "Azerbaijan",
+    "Bahrain",
+    "Bhutan",
+    "Brunei",
+    "Cambodia",
+    "Georgia",
+    "Iran",
+    "Iraq",
+    "Israel",
+    "Jordan",
+    "Kuwait",
+    "Kyrgyzstan",
+    "Laos",
+    "Lebanon",
+    "Maldives",
+    "Mongolia",
+    "Myanmar",
+    "Nepal",
+    "North Korea",
+    "Oman",
+    "Palestine",
+    "Qatar",
+    "Singapore",
+    "Sri Lanka",
+    "Syria",
+    "Taiwan",
+    "Tajikistan",
+    "Timor-Leste",
+    "Turkmenistan",
+    "United Arab Emirates",
+    "Uzbekistan",
+    "Yemen",
+  ],
+  Europe: [
+    "Germany",
+    "United Kingdom",
+    "France",
+    "Italy",
+    "Russia",
+    "Spain",
+    "Netherlands",
+    "Poland",
+    "Norway",
+    "Denmark",
+    "Romania",
+    "Czech Republic",
+    "Portugal",
+    "Finland",
+    "Albania",
+    "Andorra",
+    "Austria",
+    "Belarus",
+    "Belgium",
+    "Bosnia and Herzegovina",
+    "Bulgaria",
+    "Croatia",
+    "Cyprus",
+    "Estonia",
+    "Greece",
+    "Hungary",
+    "Iceland",
+    "Ireland",
+    "Kosovo",
+    "Latvia",
+    "Liechtenstein",
+    "Lithuania",
+    "Luxembourg",
+    "Malta",
+    "Moldova",
+    "Monaco",
+    "Montenegro",
+    "North Macedonia",
+    "San Marino",
+    "Serbia",
+    "Slovakia",
+    "Slovenia",
+    "Sweden",
+    "Switzerland",
+    "Ukraine",
+    "Vatican City",
+  ],
+  Oceania: [
+    "Australia",
+    "Fiji",
+    "Kiribati",
+    "Marshall Islands",
+    "Micronesia",
+    "Nauru",
+    "New Zealand",
+    "Palau",
+    "Papua New Guinea",
+    "Samoa",
+    "Solomon Islands",
+    "Tonga",
+    "Tuvalu",
+    "Vanuatu",
+  ],
+};
+
+const REGION_OF = {};
+Object.entries(REGION_COUNTRIES).forEach(([region, list]) =>
+  list.forEach((name) => { REGION_OF[name] = region; })
+);
 
 function FlagTapGame() {
   const [activeIndex, setActiveIndex] = useState(null);
   const [bursts, setBursts] = useState([]);
   const [tapped, setTapped] = useState(() => new Set());
+  const [region, setRegion] = useState("All");
   const timeoutRef = useRef(null);
 
   const speak = (text, rate = 0.9, pitch = 1.05) => {
@@ -96,6 +481,28 @@ function FlagTapGame() {
 
   const progress = tapped.size;
   const total = COUNTRIES.length;
+
+  const inRegion = (country, id) => id === "All" || REGION_OF[country.name] === id;
+  const visible = COUNTRIES
+    .map((country, index) => ({ country, index }))
+    .filter(({ country }) => inRegion(country, region));
+  const regionStats = (id) => {
+    let learned = 0, count = 0;
+    COUNTRIES.forEach((country, index) => {
+      if (!inRegion(country, id)) return;
+      count += 1;
+      if (tapped.has(index)) learned += 1;
+    });
+    return { learned, count };
+  };
+  const current = regionStats(region);
+
+  const pickRegion = (r) => {
+    clearTimeout(timeoutRef.current);
+    setActiveIndex(null);
+    setRegion(r.id);
+    speak(r.say);
+  };
 
   return (
     <div
@@ -135,6 +542,12 @@ function FlagTapGame() {
         .tile:active {
           transform: scale(0.94);
         }
+        .regionTab {
+          transition: transform 0.15s ease;
+        }
+        .regionTab:active {
+          transform: scale(0.94);
+        }
         .tile.active {
           animation: pop 0.5s ease, glow 0.6s ease;
         }
@@ -169,6 +582,62 @@ function FlagTapGame() {
       </p>
 
       <div
+        role="tablist"
+        aria-label="Regions"
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "10px",
+          margin: "4px 0 16px",
+          maxWidth: "760px",
+        }}
+      >
+        {REGIONS.map((r) => {
+          const selected = region === r.id;
+          const stats = regionStats(r.id);
+          return (
+            <button
+              key={r.id}
+              role="tab"
+              aria-selected={selected}
+              onClick={() => pickRegion(r)}
+              className="regionTab"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                minHeight: "48px",
+                padding: "8px 16px",
+                borderRadius: "999px",
+                border: selected ? "2px solid #2B4593" : "2px solid transparent",
+                background: selected ? "#2B4593" : "rgba(255,255,255,0.75)",
+                color: selected ? "#FFFFFF" : "#1E3A6E",
+                boxShadow: selected ? "0 4px 0 #1E3A6E" : "0 4px 0 rgba(30,58,110,0.18)",
+                fontFamily: "'Baloo 2', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(14px, 2.8vw, 17px)",
+                cursor: "pointer",
+                outline: "none",
+              }}
+            >
+              <span style={{ fontSize: "1.3em", lineHeight: 1 }}>{r.icon}</span>
+              <span>{r.label}</span>
+              <span
+                style={{
+                  fontSize: "0.75em",
+                  fontWeight: 600,
+                  opacity: 0.8,
+                }}
+              >
+                {stats.learned}/{stats.count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div
         style={{
           margin: "0 0 22px",
           height: "10px",
@@ -181,7 +650,7 @@ function FlagTapGame() {
         <div
           style={{
             height: "100%",
-            width: `${(progress / total) * 100}%`,
+            width: `${current.count ? (current.learned / current.count) * 100 : 0}%`,
             borderRadius: "999px",
             background: "#2B4593",
             transition: "width 0.4s ease",
@@ -198,7 +667,7 @@ function FlagTapGame() {
           maxWidth: "760px",
         }}
       >
-        {COUNTRIES.map((country, index) => {
+        {visible.map(({ country, index }) => {
           const isActive = activeIndex === index;
           const burst = bursts.find((b) => b.index === index);
           const isLearned = tapped.has(index);
