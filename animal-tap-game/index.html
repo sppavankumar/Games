@@ -21,6 +21,18 @@
 <script type="text/babel" data-type="module">
 const { useState, useRef } = React;
 
+// ---- Shuffle helper -------------------------------------------------------
+// Fisher-Yates shuffle: returns a new array in random order without mutating
+// the input. Used so the card layout is randomized on every page load/refresh.
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 const ANIMALS = [
   { name: "Cow", sound: "Moo!", emoji: "🐮", bg: "#FFD166", ring: "#F4A300" },
   { name: "Dog", sound: "Woof!", emoji: "🐶", bg: "#FF9F76", ring: "#F76F3C" },
@@ -34,6 +46,7 @@ const ANIMALS = [
 
 function AnimalTapGame() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [items] = useState(() => shuffleArray(ANIMALS));
   const [bursts, setBursts] = useState([]);
   const timeoutRef = useRef(null);
 
@@ -146,7 +159,7 @@ function AnimalTapGame() {
           maxWidth: "640px",
         }}
       >
-        {ANIMALS.map((animal, index) => {
+        {items.map((animal, index) => {
           const isActive = activeIndex === index;
           const burst = bursts.find((b) => b.index === index);
           return (

@@ -23,6 +23,18 @@ const DEFAULT_FAMILY = [
   { id: 8, name: "Meenakshi", photo: "./photos/meenakshi.jpg", tape: 2, rot: 3 },
 ];
 
+// ---- Shuffle helper -------------------------------------------------------
+// Fisher-Yates shuffle: returns a new array in random order without mutating
+// the input. Used so the card layout is randomized on every page load/refresh.
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
@@ -167,7 +179,7 @@ function PhotoCard({ member, editing, onTap, onNameChange, onPhotoPathChange, on
 }
 
 export default function FamilyTapGame() {
-  const [family, setFamily] = useState(DEFAULT_FAMILY);
+  const [family, setFamily] = useState(() => shuffleArray(DEFAULT_FAMILY));
   const [editing, setEditing] = useState(false);
   const [poppedId, setPoppedId] = useState(null);
   const popTimeout = useRef(null);
