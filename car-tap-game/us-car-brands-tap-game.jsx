@@ -48,6 +48,22 @@ const BRANDS = [
   { name: "Rivian", slug: "rivian", color: "#1B2A22", accent: "#C9A24B" },
   { name: "Lucid", slug: "lucid", color: "#0A0A0A", accent: "#4A90D9" },
   { name: "Volvo", slug: "volvo", color: "#1A1A1A", accent: "#C0C9D6" },
+  { name: "Alfa Romeo", slug: "AlfaRomeo", color: "#8A1521", accent: "#C0C9D6" },
+  { name: "BYD", slug: "BYD", color: "#0A2F5C", accent: "#E6E6E6" },
+  { name: "Fiat", slug: "fiat", color: "#A6120D", accent: "#E6E6E6" },
+  { name: "Lotus", slug: "lotus", color: "#0A3D2E", accent: "#FFD400" },
+  { name: "Mahindra", slug: "mahindra", color: "#C8102E", accent: "#1A1A1A" },
+  { name: "Mercedes-Benz", slug: "mercedesbenz", color: "#1A1A1A", accent: "#C0C9D6" },
+  { name: "Mini", slug: "mini", color: "#101418", accent: "#C8102E" },
+  { name: "Pagani", slug: "pagani", color: "#101418", accent: "#C9A24B" },
+  { name: "Peugeot", slug: "peugeot", color: "#0A0A0A", accent: "#C8102E" },
+  { name: "Polestar", slug: "polestar", color: "#0A0A0A", accent: "#FFFFFF" },
+  { name: "Ram", slug: "ram", color: "#0A0A0A", accent: "#B0161C" },
+  { name: "Renault", slug: "renault", color: "#1A1A1A", accent: "#FFD400" },
+  { name: "Skoda", slug: "skoda", color: "#0A3D2E", accent: "#E6E6E6" },
+  { name: "Suzuki", slug: "suzuki", color: "#0B2545", accent: "#E6E6E6" },
+  { name: "Tata", slug: "tata", color: "#0A1F3D", accent: "#E6E6E6" },
+  { name: "VinFast", slug: "VinFast", color: "#8A1521", accent: "#FFD400" },
 ].map((b, i) => ({ ...b, id: i, photoUrl: `/images/${b.slug}.jpg` }));
 
 // ---- Shuffle helper -------------------------------------------------------
