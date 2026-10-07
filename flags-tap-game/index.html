@@ -87,11 +87,238 @@ const COUNTRIES = [
   { name: "New Zealand", emoji: "🇳🇿", bg: "#E3E9FB", ring: "#00247D" },
 ];
 
+// Region tabs. Each country belongs to exactly one region (looked up by name).
+const REGIONS = [
+  { id: "All", label: "All", icon: "🌍", say: "All the flags" },
+  { id: "Africa", label: "Africa", icon: "🦁", say: "Africa" },
+  { id: "Americas", label: "Americas", icon: "🌎", say: "Americas" },
+  { id: "Asia", label: "Asia", icon: "🐼", say: "Asia" },
+  { id: "Europe", label: "Europe", icon: "🏰", say: "Europe" },
+  { id: "Oceania", label: "Oceania", icon: "🐨", say: "Oceania" },
+];
+
+const REGION_COUNTRIES = {
+  Africa: [
+    "Algeria",
+    "Angola",
+    "Benin",
+    "Botswana",
+    "Burkina Faso",
+    "Burundi",
+    "Cape Verde",
+    "Cameroon",
+    "Central African Republic",
+    "Chad",
+    "Comoros",
+    "Republic of the Congo",
+    "DR Congo",
+    "Djibouti",
+    "Egypt",
+    "Equatorial Guinea",
+    "Eritrea",
+    "Eswatini",
+    "Ethiopia",
+    "Gabon",
+    "Gambia",
+    "Ghana",
+    "Guinea",
+    "Guinea-Bissau",
+    "Ivory Coast",
+    "Kenya",
+    "Lesotho",
+    "Liberia",
+    "Libya",
+    "Madagascar",
+    "Malawi",
+    "Mali",
+    "Mauritania",
+    "Mauritius",
+    "Morocco",
+    "Mozambique",
+    "Namibia",
+    "Niger",
+    "Nigeria",
+    "Rwanda",
+    "Sao Tome and Principe",
+    "Senegal",
+    "Seychelles",
+    "Sierra Leone",
+    "Somalia",
+    "South Africa",
+    "South Sudan",
+    "Sudan",
+    "Tanzania",
+    "Togo",
+    "Tunisia",
+    "Uganda",
+    "Zambia",
+    "Zimbabwe",
+  ],
+  Americas: [
+    "United States",
+    "Canada",
+    "Mexico",
+    "Brazil",
+    "Colombia",
+    "Chile",
+    "Peru",
+    "Antigua and Barbuda",
+    "Argentina",
+    "Bahamas",
+    "Barbados",
+    "Belize",
+    "Bolivia",
+    "Costa Rica",
+    "Cuba",
+    "Dominica",
+    "Dominican Republic",
+    "Ecuador",
+    "El Salvador",
+    "Grenada",
+    "Guatemala",
+    "Guyana",
+    "Haiti",
+    "Honduras",
+    "Jamaica",
+    "Nicaragua",
+    "Panama",
+    "Paraguay",
+    "Saint Kitts and Nevis",
+    "Saint Lucia",
+    "Saint Vincent and the Grenadines",
+    "Suriname",
+    "Trinidad and Tobago",
+    "Uruguay",
+    "Venezuela",
+  ],
+  Asia: [
+    "China",
+    "India",
+    "Japan",
+    "South Korea",
+    "Turkey",
+    "Indonesia",
+    "Saudi Arabia",
+    "Thailand",
+    "Vietnam",
+    "Malaysia",
+    "Philippines",
+    "Bangladesh",
+    "Hong Kong",
+    "Pakistan",
+    "Kazakhstan",
+    "Afghanistan",
+    "Armenia",
+    "Azerbaijan",
+    "Bahrain",
+    "Bhutan",
+    "Brunei",
+    "Cambodia",
+    "Georgia",
+    "Iran",
+    "Iraq",
+    "Israel",
+    "Jordan",
+    "Kuwait",
+    "Kyrgyzstan",
+    "Laos",
+    "Lebanon",
+    "Maldives",
+    "Mongolia",
+    "Myanmar",
+    "Nepal",
+    "North Korea",
+    "Oman",
+    "Palestine",
+    "Qatar",
+    "Singapore",
+    "Sri Lanka",
+    "Syria",
+    "Taiwan",
+    "Tajikistan",
+    "Timor-Leste",
+    "Turkmenistan",
+    "United Arab Emirates",
+    "Uzbekistan",
+    "Yemen",
+  ],
+  Europe: [
+    "Germany",
+    "United Kingdom",
+    "France",
+    "Italy",
+    "Russia",
+    "Spain",
+    "Netherlands",
+    "Poland",
+    "Norway",
+    "Denmark",
+    "Romania",
+    "Czech Republic",
+    "Portugal",
+    "Finland",
+    "Albania",
+    "Andorra",
+    "Austria",
+    "Belarus",
+    "Belgium",
+    "Bosnia and Herzegovina",
+    "Bulgaria",
+    "Croatia",
+    "Cyprus",
+    "Estonia",
+    "Greece",
+    "Hungary",
+    "Iceland",
+    "Ireland",
+    "Kosovo",
+    "Latvia",
+    "Liechtenstein",
+    "Lithuania",
+    "Luxembourg",
+    "Malta",
+    "Moldova",
+    "Monaco",
+    "Montenegro",
+    "North Macedonia",
+    "San Marino",
+    "Serbia",
+    "Slovakia",
+    "Slovenia",
+    "Sweden",
+    "Switzerland",
+    "Ukraine",
+    "Vatican City",
+  ],
+  Oceania: [
+    "Australia",
+    "Fiji",
+    "Kiribati",
+    "Marshall Islands",
+    "Micronesia",
+    "Nauru",
+    "New Zealand",
+    "Palau",
+    "Papua New Guinea",
+    "Samoa",
+    "Solomon Islands",
+    "Tonga",
+    "Tuvalu",
+    "Vanuatu",
+  ],
+};
+
+const REGION_OF = {};
+Object.entries(REGION_COUNTRIES).forEach(([region, list]) =>
+  list.forEach((name) => { REGION_OF[name] = region; })
+);
+
 function FlagTapGame() {
   const [activeIndex, setActiveIndex] = useState(null);
   const [items] = useState(() => shuffleArray(COUNTRIES));
   const [bursts, setBursts] = useState([]);
   const [tapped, setTapped] = useState(() => new Set());
+  const [region, setRegion] = useState("All");
   const timeoutRef = useRef(null);
 
   const speak = (text, rate = 0.9, pitch = 1.05) => {
@@ -120,6 +347,28 @@ function FlagTapGame() {
 
   const progress = tapped.size;
   const total = COUNTRIES.length;
+
+  const inRegion = (country, id) => id === "All" || REGION_OF[country.name] === id;
+  const visible = COUNTRIES
+    .map((country, index) => ({ country, index }))
+    .filter(({ country }) => inRegion(country, region));
+  const regionStats = (id) => {
+    let learned = 0, count = 0;
+    COUNTRIES.forEach((country, index) => {
+      if (!inRegion(country, id)) return;
+      count += 1;
+      if (tapped.has(index)) learned += 1;
+    });
+    return { learned, count };
+  };
+  const current = regionStats(region);
+
+  const pickRegion = (r) => {
+    clearTimeout(timeoutRef.current);
+    setActiveIndex(null);
+    setRegion(r.id);
+    speak(r.say);
+  };
 
   return (
     <div
@@ -159,6 +408,12 @@ function FlagTapGame() {
         .tile:active {
           transform: scale(0.94);
         }
+        .regionTab {
+          transition: transform 0.15s ease;
+        }
+        .regionTab:active {
+          transform: scale(0.94);
+        }
         .tile.active {
           animation: pop 0.5s ease, glow 0.6s ease;
         }
@@ -193,6 +448,62 @@ function FlagTapGame() {
       </p>
 
       <div
+        role="tablist"
+        aria-label="Regions"
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "10px",
+          margin: "4px 0 16px",
+          maxWidth: "760px",
+        }}
+      >
+        {REGIONS.map((r) => {
+          const selected = region === r.id;
+          const stats = regionStats(r.id);
+          return (
+            <button
+              key={r.id}
+              role="tab"
+              aria-selected={selected}
+              onClick={() => pickRegion(r)}
+              className="regionTab"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                minHeight: "48px",
+                padding: "8px 16px",
+                borderRadius: "999px",
+                border: selected ? "2px solid #2B4593" : "2px solid transparent",
+                background: selected ? "#2B4593" : "rgba(255,255,255,0.75)",
+                color: selected ? "#FFFFFF" : "#1E3A6E",
+                boxShadow: selected ? "0 4px 0 #1E3A6E" : "0 4px 0 rgba(30,58,110,0.18)",
+                fontFamily: "'Baloo 2', sans-serif",
+                fontWeight: 800,
+                fontSize: "clamp(14px, 2.8vw, 17px)",
+                cursor: "pointer",
+                outline: "none",
+              }}
+            >
+              <span style={{ fontSize: "1.3em", lineHeight: 1 }}>{r.icon}</span>
+              <span>{r.label}</span>
+              <span
+                style={{
+                  fontSize: "0.75em",
+                  fontWeight: 600,
+                  opacity: 0.8,
+                }}
+              >
+                {stats.learned}/{stats.count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div
         style={{
           margin: "0 0 22px",
           height: "10px",
@@ -205,7 +516,7 @@ function FlagTapGame() {
         <div
           style={{
             height: "100%",
-            width: `${(progress / total) * 100}%`,
+            width: `${current.count ? (current.learned / current.count) * 100 : 0}%`,
             borderRadius: "999px",
             background: "#2B4593",
             transition: "width 0.4s ease",
